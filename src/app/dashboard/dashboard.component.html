@@ -1,0 +1,9 @@
+<div>
+  <h1>Hello World!</h1>
+  <button (click)="logout()">Logout</button>
+  <ul>
+    <li class="text" *ngFor="let item of items | async">
+      {{ item.type }}
+    </li>
+  </ul> 
+</div>
