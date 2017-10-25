@@ -1,0 +1,13 @@
+.nav-bar {
+    width:95vw;
+    display:flex;
+    flex-direction:row;
+    align-items: flex-start;
+    justify-content:space-between;
+    margin-bottom: 20vh;
+}
+.title {
+    margin: 0 auto;
+    font-family: 'Kaushan Script', cursive;
+    font-size: 60px;
+}

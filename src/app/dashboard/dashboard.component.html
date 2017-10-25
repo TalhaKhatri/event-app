@@ -1,9 +1,13 @@
-<div>
-  <h1>Hello World!</h1>
-  <button (click)="logout()">Logout</button>
-  <ul>
-    <li class="text" *ngFor="let item of items | async">
-      {{ item.type }}
-    </li>
-  </ul> 
+<div class="main">
+  <button *ngIf="!addEvent" (click)="onAddEvent()">Add Event</button>
+  <div class="events-container">
+    <event-list
+    *ngIf="!addEvent"
+    [events]="events"></event-list>
+    <add-event 
+    *ngIf="addEvent"
+    (submitted)="handleSubmit($event)"
+    (cancel)="handleCancel($event)">
+    </add-event>
+  </div> 
 </div>

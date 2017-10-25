@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
+import { EventFormComponent } from './event-form.component';
+import { EventListComponent } from './event-list.component';
 
 const routes: Routes = [
   { 
@@ -14,7 +16,9 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    EventFormComponent,
+    EventListComponent
   ],
   imports: [
     CommonModule,

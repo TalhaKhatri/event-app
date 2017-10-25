@@ -1,0 +1,18 @@
+.events-container {
+    margin-top: 10vh;
+    margin: 0 auto;
+    width: 60vw;
+    padding: 30px 0;
+    border-radius: 10px; 
+    background: #eee;
+    box-shadow: 0 1px 4px rgba(53,60,72,0.3);
+}
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+button {
+    margin-right: 17vw;
+    margin-bottom: 10px;
+}

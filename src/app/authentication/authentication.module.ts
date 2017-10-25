@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationComponent } from './authentication.component';
 import { AuthFormComponent } from './auth-form.component';
+import { JoinFormComponent } from './join-form.component';
 
 const routes: Routes = [
   { 
@@ -16,7 +17,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AuthenticationComponent,
-    AuthFormComponent
+    AuthFormComponent,
+    JoinFormComponent
   ],
   imports: [
     CommonModule,

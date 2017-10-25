@@ -7,19 +7,17 @@ import * as firebase from 'firebase/app';
 import { User } from '../interfaces/user.interface';
 @Component({
     selector:'auth',
+    styleUrls: ['./authentication.component.scss'],
     template:`
         <div>
             <div class="auth">
-                <auth-form
-                    (submitted)="createUser($event)">
-                    <h3>Create account</h3>
-                </auth-form>
+                <join-form
+                (submitted)="createUser($event)">
+                </join-form>
                 <auth-form 
-                    (submitted)="loginUser($event)">
-                    <h3>Login</h3>
+                (submitted)="loginUser($event)">
                 </auth-form>
             </div>
-            <!-- <button (click)="logout($event)">Logout</button> -->
         </div>
     `
 })
@@ -38,6 +36,7 @@ export class AuthenticationComponent implements OnInit {
   }
 
     loginUser(user: User) {
+    console.log(user);
     this.afAuth.auth
       .signInWithEmailAndPassword(user.email, user.password)
       .then(() => {
@@ -54,15 +53,15 @@ export class AuthenticationComponent implements OnInit {
     this.afAuth.auth
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(() => {
+        firebase.auth().currentUser.updateProfile({
+            displayName: user.displayName,
+            photoURL: ""
+        }).then(() => {
+            console.log("Name updated.");
+        });
         console.log("User created.");
         console.log(user);
       });
   }
-  logout(event) {
-    this.afAuth.auth
-      .signOut()
-      .then(() => {
-        console.log("User logged out.");
-      });
-  }
+  
 }

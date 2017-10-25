@@ -1,4 +1,12 @@
-
-<router-outlet></router-outlet>  
+<div>
+    <div class="nav-bar">
+        <h1 class="title">Event Planner</h1>
+        <button *ngIf="user" (click)="logout()">Logout</button>
+    </div>
+    <div>
+        <router-outlet>
+        </router-outlet>      
+    </div>
+</div>
 
 
