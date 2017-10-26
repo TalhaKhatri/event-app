@@ -3,8 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
-import { EventFormComponent } from './event-form.component';
-import { EventListComponent } from './event-list.component';
+import { EventFormComponent } from './event/event-form.component';
+import { EventListComponent } from './event/event-list.component';
+import { AddEventComponent } from './add-event.component';
+import { EditEventComponent } from './event/edit-event.component';
 
 const routes: Routes = [
   { 
@@ -18,7 +20,9 @@ const routes: Routes = [
   declarations: [
     DashboardComponent,
     EventFormComponent,
-    EventListComponent
+    EventListComponent,
+    AddEventComponent,
+    EditEventComponent
   ],
   imports: [
     CommonModule,

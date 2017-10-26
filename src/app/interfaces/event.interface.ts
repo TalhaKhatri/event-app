@@ -1,4 +1,5 @@
 export interface Event {
+    id?: string,
     name: string,
     creator?: string,
     creatorName?: string,

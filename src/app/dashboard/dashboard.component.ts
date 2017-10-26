@@ -12,13 +12,15 @@ import { Event } from '../interfaces/event.interface';
 })
 export class DashboardComponent implements OnInit {
   addEvent: boolean = false;
-  events: Observable<any[]>;
+  editEvent: boolean = false;
+  events: Observable<Event[]>;
   user: firebase.User = null;
+  event: Event = null;
   constructor(
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
     private router: Router) {
-    this.events = db.collection('events').valueChanges();
+    
   }
 
   ngOnInit() {
@@ -28,18 +30,45 @@ export class DashboardComponent implements OnInit {
       } else {
         this.user = null;
       }
-    })
+    });
+    this.events = this.db.collection<Event>("events").snapshotChanges().map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Event;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      });
+    });
+  }
+
+  update() {
+    this.events = this.db.collection<Event>("events").snapshotChanges().map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Event;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      });
+    });
   }
 
   onAddEvent() {
     this.addEvent = true;
   }
 
-  handleCancel(event: boolean) {
-    this.addEvent = event;
+  onEditEvent(event: Event) {
+    this.editEvent = true;
+    this.event = event;
   }
 
-  handleSubmit(event: Event) {
+  handleAddCancel(cancel: boolean) {
+    this.addEvent = cancel;
+  }
+
+  handleEditCancel(cancel: boolean) {
+    this.editEvent = cancel;
+    this.event = null;
+  }
+
+  handleAddSubmit(event: Event) {
     event.creator = this.user.uid;
     event.creatorName = this.user.displayName;
     this.db.collection('events')
@@ -47,9 +76,38 @@ export class DashboardComponent implements OnInit {
       .then((docRef) => {
         console.log("Event added: ", docRef);
         this.addEvent = false;
+        this.update();
       })
       .catch((error) => {
         console.log("Error:", error);
+      });
+  }
+
+  handleEditSubmit(event: Event) {
+    event.creator = this.user.uid;
+    event.creatorName = this.user.displayName;
+    this.db.collection('events')
+      .doc(this.event.id)
+      .update(event)
+      .then((docRef) => {
+        console.log("Event updated: ", docRef);
+        this.editEvent = false;
+        this.update();
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  }
+
+  handleDelete(eventId: string) {
+    this.db.collection("events")
+      .doc(eventId)
+      .delete()
+      .then(() => {
+        console.log("Successfully deleted");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }
 

@@ -1,3 +1,12 @@
+.delete {
+        display: none;
+        cursor: pointer;
+}
+.edit {
+        display: none;
+        cursor: pointer;
+}
+
 li {
         margin: 0 auto;
         width: 80%;
@@ -7,4 +16,21 @@ li {
         color: white;
         border-radius: 5px;
         margin-bottom: 5px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+
+        &:hover .delete {
+                display: block;
+        }
+        &:hover .edit {
+                display: block;
+        }
+        &:hover {
+                background-color: #2879A7
+        }
+}
+span {
+        margin-right: auto;
 }

@@ -2,12 +2,21 @@
   <button *ngIf="!addEvent" (click)="onAddEvent()">Add Event</button>
   <div class="events-container">
     <event-list
-    *ngIf="!addEvent"
-    [events]="events"></event-list>
-    <add-event 
-    *ngIf="addEvent"
-    (submitted)="handleSubmit($event)"
-    (cancel)="handleCancel($event)">
-    </add-event>
+    *ngIf="!addEvent && !editEvent"
+    [events]="events"
+    [user]="user"
+    (deleted)="handleDelete($event)"
+    (editted)="onEditEvent($event)"></event-list>
+    
+    <add-event
+    *ngIf="addEvent && !editEvent"
+    (submitted)="handleAddSubmit($event)"
+    (cancel)="handleAddCancel($event)"></add-event>
+
+    <edit-event
+    *ngIf="!addEvent && editEvent"
+    (submitted)="handleEditSubmit($event)"
+    (cancel)="handleEditCancel($event)"
+    [event]="event"></edit-event>
   </div> 
 </div>
