@@ -8,7 +8,7 @@ import { Event } from '../../interfaces/event.interface';
     template: `
         <ul>
             <li class="text" *ngFor="let event of events | async;">
-                <span>{{ event.name }} | on: {{ event?.date }} | at {{ event?.venue }}</span>
+                <span (click)="onClick(event)">{{ event.name }} | on: {{ event?.date }} | at {{ event?.venue }}</span>
                 <i class="material-icons edit" *ngIf="event?.creator===user.uid" (click)="onEdit(event)">edit</i>
                 <i class="material-icons delete" *ngIf="event?.creator===user.uid" (click)="onDelete(event)">delete</i>
             </li>
@@ -20,6 +20,7 @@ export class EventListComponent {
     @Input() user: firebase.User;
     @Output() deleted: EventEmitter<string> = new EventEmitter<string>();
     @Output() editted: EventEmitter<Event> = new EventEmitter<Event>();
+    @Output() clicked: EventEmitter<Event> = new EventEmitter<Event>();
 
     constructor() {
 
@@ -31,6 +32,11 @@ export class EventListComponent {
 
     onEdit(event: Event) {
         this.editted.emit(event);
+        console.log(event);
+    }
+
+    onClick(event: Event) {
+        this.clicked.emit(event);
         console.log(event);
     }
 }

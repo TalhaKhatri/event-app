@@ -6,7 +6,7 @@ import { AuthenticationComponent } from './authentication.component';
 import { AuthFormComponent } from './auth-form.component';
 import { JoinFormComponent } from './join-form.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { 
     path: 'login', children: [
       { path: '', component: AuthenticationComponent, pathMatch: 'full' }
@@ -25,6 +25,7 @@ const routes: Routes = [
     FormsModule,
     RouterModule.forChild(routes)
   ],
+  providers: [],
   exports: [
     AuthenticationComponent
   ]

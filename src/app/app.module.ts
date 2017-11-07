@@ -16,8 +16,12 @@ import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
 import { HomeComponent } from './home.component';
+//services
+import { AuthenticationService } from './services/authentication.service';
+import { DatabaseService } from './services/database.service';
 
-const routes: Routes = [
+
+ export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'},
   { path: '**', component: NotFoundComponent }
 ]
@@ -39,7 +43,10 @@ const routes: Routes = [
     AuthenticationModule,
     DashboardModule
   ],
-  providers: [],
+  providers: [
+    AuthenticationService,
+    DatabaseService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

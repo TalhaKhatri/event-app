@@ -5,8 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { EventFormComponent } from './event/event-form.component';
 import { EventListComponent } from './event/event-list.component';
-import { AddEventComponent } from './add-event.component';
+import { AddEventComponent } from './event/add-event.component';
 import { EditEventComponent } from './event/edit-event.component';
+import { ViewEventComponent } from './event/view-event.component';
 
 const routes: Routes = [
   { 
@@ -22,7 +23,8 @@ const routes: Routes = [
     EventFormComponent,
     EventListComponent,
     AddEventComponent,
-    EditEventComponent
+    EditEventComponent,
+    ViewEventComponent
   ],
   imports: [
     CommonModule,

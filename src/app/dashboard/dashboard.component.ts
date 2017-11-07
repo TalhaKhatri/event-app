@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthenticationService } from '../services/authentication.service';
+import { DatabaseService } from '../services/database.service';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { Event } from '../interfaces/event.interface';
@@ -13,41 +14,31 @@ import { Event } from '../interfaces/event.interface';
 export class DashboardComponent implements OnInit {
   addEvent: boolean = false;
   editEvent: boolean = false;
-  events: Observable<Event[]>;
+  viewEvent: boolean = false;
+  eventList: Observable<Event[]>;
   user: firebase.User = null;
   event: Event = null;
   constructor(
-    private afAuth: AngularFireAuth,
+    private authService: AuthenticationService,
+    private dbService: DatabaseService,
     private db: AngularFirestore,
     private router: Router) {
     
   }
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
+    this.authService.isLoggedIn((user) => {
       if(user) {
         this.user = user;
       } else {
         this.user = null;
       }
     });
-    this.events = this.db.collection<Event>("events").snapshotChanges().map(actions => {
-      return actions.map(a => {
-        const data = a.payload.doc.data() as Event;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      });
-    });
+    this.eventList = this.dbService.getEvents();
   }
 
   update() {
-    this.events = this.db.collection<Event>("events").snapshotChanges().map(actions => {
-      return actions.map(a => {
-        const data = a.payload.doc.data() as Event;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      });
-    });
+    this.eventList = this.dbService.getEvents();
   }
 
   onAddEvent() {
@@ -55,15 +46,19 @@ export class DashboardComponent implements OnInit {
   }
 
   onEditEvent(event: Event) {
+    console.log("Clicked event: ", event);
     this.editEvent = true;
     this.event = event;
   }
 
-  handleAddCancel(cancel: boolean) {
-    this.addEvent = cancel;
+  onClickEvent(event: Event) {
+    this.viewEvent = true;
+    this.event = event;
   }
 
-  handleEditCancel(cancel: boolean) {
+  handleCancel(cancel: boolean) {
+    this.addEvent = cancel;
+    this.viewEvent = cancel;
     this.editEvent = cancel;
     this.event = null;
   }
@@ -71,8 +66,7 @@ export class DashboardComponent implements OnInit {
   handleAddSubmit(event: Event) {
     event.creator = this.user.uid;
     event.creatorName = this.user.displayName;
-    this.db.collection('events')
-      .add(event)
+    this.dbService.addEvent(event)
       .then((docRef) => {
         console.log("Event added: ", docRef);
         this.addEvent = false;
@@ -86,12 +80,11 @@ export class DashboardComponent implements OnInit {
   handleEditSubmit(event: Event) {
     event.creator = this.user.uid;
     event.creatorName = this.user.displayName;
-    this.db.collection('events')
-      .doc(this.event.id)
-      .update(event)
+    this.dbService.updateEvent(event, this.event.id)
       .then((docRef) => {
         console.log("Event updated: ", docRef);
         this.editEvent = false;
+        this.event = null;
         this.update();
       })
       .catch((error) => {
@@ -100,9 +93,7 @@ export class DashboardComponent implements OnInit {
   }
 
   handleDelete(eventId: string) {
-    this.db.collection("events")
-      .doc(eventId)
-      .delete()
+      this.dbService.removeEvent(eventId)
       .then(() => {
         console.log("Successfully deleted");
       })

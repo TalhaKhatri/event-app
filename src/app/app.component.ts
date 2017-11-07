@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
 import { User } from './interfaces/user.interface';
+import { AuthenticationService } from './services/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -14,26 +14,22 @@ export class AppComponent implements OnInit {
   title = 'app';
   user: firebase.User = null;
   constructor(
-    private afAuth: AngularFireAuth,
-    private router: Router) {}
+    private router: Router,
+    private authService: AuthenticationService) {}
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) =>{
-      if(!user) {
-        this.router.navigate(['login']);
-        this.user = null;
-      } else {
-        this.user = user;
-      }
-    })
+      this.authService.isLoggedIn((user) =>{
+        if(!user) {
+          this.router.navigate(['login']);
+          this.user = null;
+        } else {
+          this.router.navigate(['dashboard']);
+          this.user = user;
+        }
+      });
   }
 
   logout(event) {
-    this.afAuth.auth
-      .signOut()
-      .then(() => {
-        this.user = null;
-        console.log("User logged out.");
-      });
+    this.authService.logOut().then(() => this.user = null);
   }
 }

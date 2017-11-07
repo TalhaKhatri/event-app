@@ -7,28 +7,40 @@ import { Event } from '../../interfaces/event.interface';
         <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
             <label>
             Name
-            <input type="text" name="name" [ngModel]="event?.name">
+            <input  type="text" 
+                    name="name" 
+                    [ngModel]="event?.name"
+                    [disabled]="disable">
             </label>
             <label>
             Venue
-            <input type="text" name="venue" [ngModel]="event?.venue">
+            <input  type="text" 
+                    name="venue" 
+                    [ngModel]="event?.venue"
+                    [disabled]="disable">
             </label>
             <label>
             Date
-            <input type="date" name="date" [ngModel]="event?.date">
+            <input  type="date" 
+                    name="date" 
+                    [ngModel]="event?.date"
+                    [disabled]="disable">                    
             </label>
             <label>
             <div>Description</div>
             <textarea rows="6" 
                     cols="30" 
                     name="description" 
-                    [ngModel]="event?.description">
+                    [ngModel]="event?.description"
+                    [disabled]="disable">                    
             </textarea>
             </label>
-            <button type="submit" [disabled]="submit">
+            <button type="submit"
+                    [disabled]="submit || disable">
             Submit
             </button>
-            <button type="button" (click)="onCancel()">
+            <button type="button" 
+                    (click)="onCancel()">
             Cancel
             </button>
         </form>
@@ -38,13 +50,19 @@ export class EventFormComponent{
     @Output() submitted: EventEmitter<Event> = new EventEmitter<Event>();
     @Output() cancel: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() event: Event;
+    @Input() disable: boolean = false;
+
     submit: boolean = false;
     constructor() {}
 
     onSubmit(event: Event) {
-        console.log(event);
-        this.submit = true;
-        this.submitted.emit(event);
+        if(event.name &&
+           event.venue &&
+           event.date){
+            console.log(event);
+            this.submit = true;
+            this.submitted.emit(event);
+        }
     }
 
     onCancel() {
