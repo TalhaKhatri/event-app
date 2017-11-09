@@ -7,7 +7,8 @@ import { Event } from '../../interfaces/event.interface';
         <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
             <label>
             Name
-            <input  type="text" 
+            <input  id="name"
+                    type="text" 
                     name="name" 
                     [ngModel]="event?.name"
                     [disabled]="disable">
@@ -35,11 +36,13 @@ import { Event } from '../../interfaces/event.interface';
                     [disabled]="disable">                    
             </textarea>
             </label>
-            <button type="submit"
+            <button id="submit"
+                    type="submit"
                     [disabled]="submit || disable">
             Submit
             </button>
-            <button type="button" 
+            <button id="cancel"
+                    type="button" 
                     (click)="onCancel()">
             Cancel
             </button>
@@ -58,11 +61,14 @@ export class EventFormComponent{
     onSubmit(event: Event) {
         if(event.name &&
            event.venue &&
-           event.date){
+           event.date &&
+           !this.submit){
             console.log(event);
             this.submit = true;
             this.submitted.emit(event);
+            return true;
         }
+        return false;
     }
 
     onCancel() {

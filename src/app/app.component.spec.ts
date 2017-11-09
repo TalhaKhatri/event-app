@@ -87,13 +87,17 @@ describe('AppComponent', () => {
       bed.compileComponents();
       fixture = TestBed.createComponent(AppComponent);
       app = fixture.componentInstance;
+      el = fixture.debugElement;
       fixture.detectChanges();
     }));
     
     it(`should navigate to 'login' page`, async(() => {
-      console.log(app.user);
       router.navigate(['login']);
       expect(location.path()).toBe('/login');
+    }))
+
+    it(`should not display 'logout' button`, async(() => {
+      expect(el.query(By.css('button'))).toBeNull();
     }))
 
     afterEach(async(() => {
