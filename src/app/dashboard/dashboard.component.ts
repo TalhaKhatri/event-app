@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { AuthenticationService } from '../services/authentication.service';
 import { DatabaseService } from '../services/database.service';
 import * as firebase from 'firebase/app';
-import { Router } from '@angular/router';
+
 import { Event } from '../interfaces/event.interface';
 @Component({
   selector: 'app-dashboard',
@@ -20,11 +19,7 @@ export class DashboardComponent implements OnInit {
   event: Event = null;
   constructor(
     private authService: AuthenticationService,
-    private dbService: DatabaseService,
-    private db: AngularFirestore,
-    private router: Router) {
-    
-  }
+    private dbService: DatabaseService) {}
 
   ngOnInit() {
     this.authService.isLoggedIn((user) => {
@@ -66,7 +61,7 @@ export class DashboardComponent implements OnInit {
   handleAddSubmit(event: Event) {
     event.creator = this.user.uid;
     event.creatorName = this.user.displayName;
-    this.dbService.addEvent(event)
+    return this.dbService.addEvent(event)
       .then((docRef) => {
         console.log("Event added: ", docRef);
         this.addEvent = false;

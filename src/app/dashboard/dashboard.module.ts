@@ -9,7 +9,7 @@ import { AddEventComponent } from './event/add-event.component';
 import { EditEventComponent } from './event/edit-event.component';
 import { ViewEventComponent } from './event/view-event.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { 
     path: 'dashboard', children: [
       { path: '', component: DashboardComponent }

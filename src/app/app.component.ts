@@ -11,7 +11,7 @@ import { AuthenticationService } from './services/authentication.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
+  title = 'Event App';
   user: firebase.User = null;
   constructor(
     private router: Router,
@@ -19,17 +19,19 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
       this.authService.isLoggedIn((user) =>{
-        if(!user) {
-          this.router.navigate(['login']);
-          this.user = null;
-        } else {
+        if(user) {
+          console.log("dashboard called");
           this.router.navigate(['dashboard']);
           this.user = user;
+        } else {
+          console.log("login called");
+          this.router.navigate(['login']);
+          this.user = null;
         }
       });
   }
 
-  logout(event) {
+  logout() {
     this.authService.logOut().then(() => this.user = null);
   }
 }

@@ -1,5 +1,7 @@
 <div class="main">
-  <button *ngIf="!addEvent" (click)="onAddEvent()">Add Event</button>
+  <button class="add" 
+    *ngIf="!addEvent && !editEvent && !viewEvent" 
+    (click)="onAddEvent()">Add Event</button>
   <div class="events-container">
     <event-list
     *ngIf="!addEvent && !editEvent && !viewEvent"

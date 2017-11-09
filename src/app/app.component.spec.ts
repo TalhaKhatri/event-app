@@ -1,18 +1,51 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import {RouterTestingModule} from "@angular/router/testing";
+import {Location} from "@angular/common";
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
 import { HomeComponent } from './home.component';
+import { AuthenticationService } from './services/authentication.service';
 
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 import { Router } from '@angular/router';
 import { routes } from './app.module';
+import { User } from './interfaces/user.interface';
+
+const user: User = {  
+  uid: 234534534,
+  displayName: "Test User",
+  email: "test@email.com",
+  password: "password"
+};
+
+let supplyUser = true;
+
+const MockAuthService = {
+  isLoggedIn(f: (u) => any){
+    if(supplyUser)
+      f(user);
+    else
+      f(null);
+  },
+  logOut(){
+    return Promise.resolve();
+  }
+}
 
 describe('AppComponent', () => {
+  let location: Location;
+  let router: Router;
+  let authService: AuthenticationService;
+  let app: AppComponent;
+  let el: DebugElement;
+  let bed;
+  let fixture: ComponentFixture<AppComponent>;
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
+    bed = TestBed.configureTestingModule({
       declarations: [
         AppComponent,
         HomeComponent,
@@ -20,25 +53,53 @@ describe('AppComponent', () => {
       ],
       imports: [
         RouterTestingModule.withRoutes(routes),
-        AngularFireModule,
-        AngularFireAuthModule
+      ],
+      providers: [
+        { provide: AuthenticationService, useValue: MockAuthService }
       ]
-    }).compileComponents();
+    });
+    bed.compileComponents();
+    router = TestBed.get(Router); 
+    location = TestBed.get(Location); 
+    authService = TestBed.get(AuthenticationService);
+    fixture = TestBed.createComponent(AppComponent);
+    el = fixture.debugElement;
+    app = fixture.componentInstance;
+    fixture.detectChanges();
   }));
-  // it('should create the app', async(() => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   const app = fixture.debugElement.componentInstance;
-  //   expect(app).toBeTruthy();
-  // }));
-  // it(`should have as title 'app'`, async(() => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   const app = fixture.debugElement.componentInstance;
-  //   expect(app.title).toEqual('app');
-  // }));
-  // it('should render title in a h1 tag', async(() => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   fixture.detectChanges();
-  //   const compiled = fixture.debugElement.nativeElement;
-  //   expect(compiled.querySelector('h1').textContent).toContain('Event Planner');
-  // }));
+  it('should create the app', async(() => {
+    expect(app).toBeTruthy();
+  }));
+
+  it(`should have as title 'Event App'`, async(() => {
+    expect(app.title).toEqual('Event App');
+  }));
+  
+  it(`should navigate to 'dashboard' page if user is signed in`, async(() => {
+    router.navigate(['/login']);
+    expect(location.path()).toBe('/dashboard');
+  }));
+
+  describe('If user is not signed in', () => {
+    
+    beforeEach(async(() => {
+      supplyUser = false;
+      bed.compileComponents();
+      fixture = TestBed.createComponent(AppComponent);
+      app = fixture.componentInstance;
+      fixture.detectChanges();
+    }));
+    
+    it(`should navigate to 'login' page`, async(() => {
+      console.log(app.user);
+      router.navigate(['login']);
+      expect(location.path()).toBe('/login');
+    }))
+
+    afterEach(async(() => {
+      supplyUser = true;
+    }));
+
+  })
+  
 });

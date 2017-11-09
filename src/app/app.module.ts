@@ -22,7 +22,7 @@ import { DatabaseService } from './services/database.service';
 
 
  export const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full'},
+  { path: '', redirectTo: '/login', pathMatch: 'full'},
   { path: '**', component: NotFoundComponent }
 ]
 
