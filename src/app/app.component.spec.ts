@@ -74,11 +74,6 @@ describe('AppComponent', () => {
   it(`should have as title 'Event App'`, async(() => {
     expect(app.title).toEqual('Event App');
   }));
-  
-  it(`should navigate to 'dashboard' page if user is signed in`, async(() => {
-    router.navigate(['/login']);
-    expect(location.path()).toBe('/dashboard');
-  }));
 
   describe('If user is not signed in', () => {
     

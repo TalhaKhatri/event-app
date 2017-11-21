@@ -20,6 +20,10 @@ export class DatabaseService {
         });
     }
 
+    getEvent(eventId: String): Observable<Event> {
+        return this.afStore.doc<Event>(`events/${eventId}`).valueChanges();
+    }
+
     addEvent(event: Event) {
         return this.afStore.collection('events').add(event);
     }

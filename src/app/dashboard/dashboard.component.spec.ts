@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import {RouterTestingModule} from "@angular/router/testing";
+import {Location} from "@angular/common";
+import { Router } from '@angular/router';
+
 
 import { DatabaseService } from '../services/database.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -17,6 +21,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { Event } from '../interfaces/event.interface';
 import { User } from '../interfaces/user.interface';
+import { routes } from './dashboard.module';
 
 const user: User = {  
   uid: 234534534,
@@ -59,6 +64,8 @@ const MockAuthService = {
 }
 
 describe('DashboardComponent', () => {
+  let location: Location;
+  let router: Router;
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   let dataService: DatabaseService;
@@ -74,7 +81,7 @@ describe('DashboardComponent', () => {
         EditEventComponent,
         ViewEventComponent
       ],
-      imports: [ FormsModule ],
+      imports: [ RouterTestingModule.withRoutes(routes), FormsModule ],
       providers: [ 
         { provide: DatabaseService, useValue: MockDatabaseService },
         { provide: AuthenticationService, useValue: MockAuthService },
@@ -83,6 +90,8 @@ describe('DashboardComponent', () => {
     dataService = bed.get(DatabaseService);
     authService = bed.get(AuthenticationService);
     bed.compileComponents();
+    router = TestBed.get(Router); 
+    location = TestBed.get(Location); 
   }));
 
   beforeEach(() => {
@@ -94,52 +103,6 @@ describe('DashboardComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should switch to add event when add is clicked', () => {
-    el.query(By.css('button.add')).triggerEventHandler('click', null);
-    fixture.detectChanges();
-    expect(component.addEvent).toBe(true);
-    expect(component.editEvent).toBe(false);
-    expect(component.viewEvent).toBe(false);
-    expect(component.event).toBeNull();
-  });
-
-  it('should switch to edit event when edit is clicked', () => {
-    el.query(By.css('event-list')).triggerEventHandler('editted', events[0]);
-    fixture.detectChanges();
-    expect(component.editEvent).toBe(true);
-    expect(component.viewEvent).toBe(false);
-    expect(component.addEvent).toBe(false);
-    expect(component.event).toEqual(events[0]);
-  });
-
-  it('should switch to view event when event is clicked', () => {
-    el.query(By.css('event-list')).triggerEventHandler('clicked', events[0]);
-    fixture.detectChanges();
-    expect(component.viewEvent).toBe(true);
-    expect(component.editEvent).toBe(false);
-    expect(component.addEvent).toBe(false);
-    expect(component.event).toEqual(events[0]);
-  });
-
-  it('should add event when submitted', () => {
-    el.query(By.css('button.add')).triggerEventHandler('click', null);
-    fixture.detectChanges();
-    spyOn(component, 'handleAddSubmit');
-    el.query(By.css('add-event')).triggerEventHandler('submitted', events[0]);
-    fixture.detectChanges();
-    expect(component.handleAddSubmit).toHaveBeenCalledWith(events[0]);
-  });
-
-  it('should update event when submitted', () => {
-    component.event = events[0];
-    component.editEvent = true;
-    fixture.detectChanges();
-    spyOn(component, 'handleEditSubmit');
-    el.query(By.css('edit-event')).triggerEventHandler('submitted', events[0]);
-    fixture.detectChanges();
-    expect(component.handleEditSubmit).toHaveBeenCalledWith(events[0]);
   });
 
   it('should delete event', () => {

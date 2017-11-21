@@ -12,7 +12,10 @@ import { ViewEventComponent } from './event/view-event.component';
 export const routes: Routes = [
   { 
     path: 'dashboard', children: [
-      { path: '', component: DashboardComponent }
+      { path: '', component: DashboardComponent },
+      { path: 'add', component: AddEventComponent },
+      { path: 'edit/:id', component: EditEventComponent},
+      { path: 'view/:id', component: ViewEventComponent}
     ]
   }
 ]

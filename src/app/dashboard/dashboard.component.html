@@ -1,30 +1,12 @@
 <div class="main">
-  <button class="add" 
-    *ngIf="!addEvent && !editEvent && !viewEvent" 
-    (click)="onAddEvent()">Add Event</button>
+  <button class="add" (click)="onAddEvent()">Add Event</button>
+    
   <div class="events-container">
     <event-list
-    *ngIf="!addEvent && !editEvent && !viewEvent"
     [events]="eventList"
     [user]="user"
     (deleted)="handleDelete($event)"
     (editted)="onEditEvent($event)"
     (clicked)="onClickEvent($event)"></event-list>
-    
-    <add-event
-    *ngIf="addEvent && !editEvent && !viewEvent"
-    (submitted)="handleAddSubmit($event)"
-    (cancel)="handleCancel($event)"></add-event>
-
-    <edit-event
-    *ngIf="!addEvent && editEvent && !viewEvent"
-    (submitted)="handleEditSubmit($event)"
-    (cancel)="handleCancel($event)"
-    [event]="event"></edit-event>
-
-    <view-event
-    *ngIf="!addEvent && !editEvent && viewEvent"
-    (cancel)="handleCancel($event)"
-    [event]="event"></view-event>
   </div> 
 </div>

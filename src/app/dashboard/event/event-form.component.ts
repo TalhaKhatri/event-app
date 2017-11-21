@@ -1,5 +1,7 @@
 import { Component, Output, Input, EventEmitter } from '@angular/core';
 import { Event } from '../../interfaces/event.interface';
+import { Observable } from 'rxjs/Observable';
+
 @Component({
     selector:'event-form',
     styleUrls: ['../styles/add-event.component.scss'],

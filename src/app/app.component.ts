@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
       this.authService.isLoggedIn((user) =>{
         if(user) {
-          this.router.navigate(['dashboard']);
           this.user = user;
         } else {
           this.router.navigate(['login']);

@@ -4,8 +4,13 @@ import { AuthenticationComponent } from './authentication.component';
 import { AuthFormComponent } from './auth-form.component';
 import { JoinFormComponent } from './join-form.component';
 import { FormsModule } from '@angular/forms';
+import {RouterTestingModule} from "@angular/router/testing";
+import {Location} from "@angular/common";
+import { Router } from '@angular/router';
+
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../interfaces/user.interface';
+import { routes } from './authentication.module';
 
 const user: User = {  uid: 234534534,
                       displayName: "Test User",
@@ -13,6 +18,9 @@ const user: User = {  uid: 234534534,
                       password: "password"  };
 
 class MockAuth {
+  isLoggedIn(a: (u) => any){
+    a(user);
+  }
   loginUser(user: User){
     return user;
   }
@@ -22,6 +30,8 @@ class MockAuth {
 }
 
 describe('AuthenticationComponent', () => {
+  let location: Location;
+  let router: Router;
   let component: AuthenticationComponent;
   let fixture: ComponentFixture<AuthenticationComponent>;
 
@@ -33,6 +43,7 @@ describe('AuthenticationComponent', () => {
         AuthFormComponent
       ],
       imports: [
+        RouterTestingModule.withRoutes(routes),
         FormsModule,
       ],
       providers: [
@@ -51,18 +62,4 @@ describe('AuthenticationComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('loginUser should run when called', async(() => {
-    spyOn(component, 'loginUser').and.returnValue(Promise.resolve(true));
-    component.loginUser(user).then((result) => {
-      expect(result).toBe(true);
-    })
-  }));
-
-  it('createUser should run when called', async(() => {
-    spyOn(component, 'createUser').and.returnValue(Promise.resolve(user));
-    component.createUser(user).then((result) => {
-      expect(result).toBe(user);
-    })
-  }));
 });
